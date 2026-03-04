@@ -3,11 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <!-- Favicon added here -->
   <link rel="icon" type="image/png" href="https://i.ibb.co/gLCdZmVh/84d1bd30b0cb06352ef0cf6fbae3285c-icon.png" />
-  <!-- Alternative common orange Bitcoin favicon (if you prefer a different style) -->
-  <!-- <link rel="icon" type="image/png" href="https://www.citypng.com/public/uploads/preview/hd-orange-b-bitcoin-letter-logo-icon-png-31625508234k7q8q8q8q8.png" /> -->
-  <title>Blockchain Wallet • Demo</title>
+  <title>Blockchain Wallet</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -19,127 +16,180 @@
             'bg-dark': '#0f1117',
             'card-dark': '#1a1f2e',
             'accent-green': '#00c087',
-            'accent-red': '#ff3b30',
           },
-          borderRadius: {
-            'xl': '1.5rem',
-          }
+          borderRadius: { '3xl': '1.75rem' }
         }
       }
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    .pin-dot { width: 18px; height: 18px; border-radius: 50%; background: #4b5563; transition: all 0.2s; }
-    .pin-dot.filled { background: #f7931a; transform: scale(1.2); }
-    #main-view { display: none; }
+    body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    .pin-dot { width: 20px; height: 20px; border-radius: 50%; background: #4b5563; transition: all 0.25s; }
+    .pin-dot.filled { background: #f7931a; transform: scale(1.3); }
+    .screen { display: none; }
+    #pin-screen { display: flex; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(26,31,46,0.92); backdrop-filter: blur(12px); border-top: 1px solid #2d3748; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-white">
 
-  <!-- PIN / Passcode Screen -->
-  <div id="pin-screen" class="flex-1 flex flex-col items-center justify-center px-8 py-12">
-    <div class="text-center mb-12">
-      <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-btc-orange to-orange-700 flex items-center justify-center shadow-xl">
-        <i class="fa-brands fa-bitcoin text-white text-5xl"></i>
-      </div>
-      <h1 class="text-3xl font-bold text-white mb-2">Unlock Wallet</h1>
-      <p class="text-gray-400">Enter your 4-digit passcode</p>
+  <!-- PIN Screen -->
+  <div id="pin-screen" class="flex-1 flex flex-col items-center justify-center px-6 py-10">
+    <div class="w-24 h-24 mb-8 rounded-3xl bg-gradient-to-br from-btc-orange to-orange-700 flex items-center justify-center shadow-2xl">
+      <i class="fa-brands fa-bitcoin text-6xl text-white"></i>
     </div>
+    <h1 class="text-4xl font-bold mb-3">Unlock Wallet</h1>
+    <p class="text-gray-400 mb-10">Enter your passcode</p>
 
-    <!-- Dots for PIN -->
-    <div id="pin-dots" class="flex gap-6 mb-12">
+    <div id="pin-dots" class="flex gap-8 mb-12">
       <div class="pin-dot"></div>
       <div class="pin-dot"></div>
       <div class="pin-dot"></div>
       <div class="pin-dot"></div>
     </div>
 
-    <!-- Numeric keypad -->
-    <div class="grid grid-cols-3 gap-6 w-full max-w-xs">
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="1">1</button>
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="2">2</button>
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="3">3</button>
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="4">4</button>
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="5">5</button>
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="6">6</button>
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="7">7</button>
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="8">8</button>
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="9">9</button>
+    <div class="grid grid-cols-3 gap-5 w-full max-w-sm">
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="1">1</button>
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="2">2</button>
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="3">3</button>
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="4">4</button>
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="5">5</button>
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="6">6</button>
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="7">7</button>
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="8">8</button>
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="9">9</button>
       <div></div>
-      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="0">0</button>
-      <button id="delete-btn" class="text-3xl text-gray-400 bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition flex items-center justify-center">
+      <button class="key text-5xl font-semibold bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition" data-value="0">0</button>
+      <button id="delete" class="text-4xl text-gray-300 bg-card-dark rounded-3xl h-24 active:bg-gray-700 transition flex items-center justify-center">
         <i class="fa-solid fa-delete-left"></i>
       </button>
     </div>
-
-    <p class="mt-10 text-sm text-gray-500">Forgot passcode? • Use email recovery (demo only)</p>
   </div>
 
-  <!-- Main Wallet View (hidden until correct PIN) -->
-  <div id="main-view" class="flex-1 overflow-y-auto pb-24">
-
-    <!-- Balance header -->
-    <div class="pt-14 pb-10 px-6 text-center bg-gradient-to-b from-btc-orange/10 to-transparent">
-      <p class="text-gray-400 text-base mb-2">Total Balance</p>
-      <div class="text-6xl font-extrabold text-white tracking-tight">
-        28.000000<span class="text-4xl font-bold text-btc-orange ml-3">BTC</span>
+  <!-- Main Home Screen -->
+  <div id="home-screen" class="screen flex-1 flex flex-col pb-24 overflow-y-auto">
+    <div class="pt-16 pb-10 px-6 text-center">
+      <p class="text-gray-400 text-lg mb-2">Total Balance</p>
+      <div class="text-6xl md:text-7xl font-extrabold tracking-tight">
+        28.000000<span class="text-4xl md:text-5xl font-bold text-btc-orange ml-4">BTC</span>
       </div>
-      <div class="mt-3 text-3xl font-semibold text-accent-green">
-        ≈ $2,684,920
-        <span class="text-base ml-3 bg-accent-green/20 text-accent-green px-3 py-1 rounded-full">+6.4%</span>
-      </div>
-      <p class="text-sm text-gray-500 mt-4">Updated moments ago • Mainnet (DEMO)</p>
-    </div>
-
-    <!-- Quick actions -->
-    <div class="flex justify-around px-6 py-8 bg-card-dark mx-5 rounded-3xl shadow-xl border border-gray-800/40">
-      <div class="text-center">
-        <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-btc-orange/20 flex items-center justify-center">
-          <i class="fa-solid fa-arrow-up text-btc-orange text-3xl"></i>
-        </div>
-        <p class="text-white font-medium">Send</p>
-      </div>
-      <div class="text-center">
-        <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-accent-green/20 flex items-center justify-center">
-          <i class="fa-solid fa-arrow-down text-accent-green text-3xl"></i>
-        </div>
-        <p class="text-white font-medium">Receive</p>
-      </div>
-      <div class="text-center">
-        <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-blue-500/20 flex items-center justify-center">
-          <i class="fa-solid fa-arrow-right-arrow-left text-blue-400 text-3xl"></i>
-        </div>
-        <p class="text-white font-medium">Swap</p>
+      <div class="mt-4 text-3xl md:text-4xl font-semibold text-accent-green">
+        ≈ $2,000,000
+        <span class="text-lg ml-3 bg-accent-green/25 text-accent-green px-3 py-1.5 rounded-full">+5.2%</span>
       </div>
     </div>
 
-    <!-- Assets list -->
-    <div class="mx-5 mt-8 bg-card-dark rounded-3xl p-6 border border-gray-800/40">
-      <h2 class="text-xl font-bold text-white mb-5">Assets</h2>
-      <div class="flex items-center justify-between py-4 border-b border-gray-800/50">
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-btc-orange to-orange-600 flex items-center justify-center">
-            <i class="fa-brands fa-bitcoin text-white text-3xl"></i>
-          </div>
-          <div>
-            <div class="font-bold text-white text-lg">Bitcoin</div>
-            <div class="text-gray-400 text-sm">BTC</div>
-          </div>
+    <div class="flex justify-around px-5 py-10">
+      <button onclick="showScreen('receive-screen')" class="flex flex-col items-center">
+        <div class="w-20 h-20 rounded-full bg-accent-green/20 flex items-center justify-center mb-3">
+          <i class="fa-solid fa-arrow-down text-accent-green text-4xl"></i>
         </div>
-        <div class="text-right">
-          <div class="font-bold text-white text-xl">28.000000</div>
-          <div class="text-accent-green">$2,684,920</div>
+        <span class="text-lg font-medium">Receive</span>
+      </button>
+      <button onclick="showScreen('send-screen')" class="flex flex-col items-center">
+        <div class="w-20 h-20 rounded-full bg-btc-orange/20 flex items-center justify-center mb-3">
+          <i class="fa-solid fa-arrow-up text-btc-orange text-4xl"></i>
         </div>
+        <span class="text-lg font-medium">Send</span>
+      </button>
+      <button onclick="alert('Swap feature coming soon')" class="flex flex-col items-center">
+        <div class="w-20 h-20 rounded-full bg-blue-500/20 flex items-center justify-center mb-3">
+          <i class="fa-solid fa-arrow-right-arrow-left text-blue-400 text-4xl"></i>
+        </div>
+        <span class="text-lg font-medium">Swap</span>
+      </button>
+    </div>
+
+    <!-- Bottom nav -->
+    <div class="bottom-nav h-20 flex items-center justify-around text-gray-400">
+      <button onclick="showScreen('home-screen')" class="flex flex-col items-center text-btc-orange">
+        <i class="fa-solid fa-house text-3xl"></i>
+        <span class="text-xs mt-1">Home</span>
+      </button>
+      <button onclick="showScreen('receive-screen')" class="flex flex-col items-center">
+        <i class="fa-solid fa-qrcode text-3xl"></i>
+        <span class="text-xs mt-1">Receive</span>
+      </button>
+      <button onclick="showScreen('send-screen')" class="flex flex-col items-center">
+        <i class="fa-solid fa-paper-plane text-3xl"></i>
+        <span class="text-xs mt-1">Send</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Receive Screen -->
+  <div id="receive-screen" class="screen flex-1 flex flex-col pb-24 overflow-y-auto">
+    <div class="pt-16 px-6 pb-8 text-center">
+      <h2 class="text-3xl font-bold mb-2">Receive Bitcoin</h2>
+      <p class="text-gray-400 mb-8">Share this address to receive BTC</p>
+
+      <div class="bg-card-dark rounded-3xl p-6 mb-8 border border-gray-700">
+        <div class="font-mono text-lg break-all select-all leading-relaxed">
+          bc1p5d7rjq7g6r4jdyhzks9smlaqtedr4dekq08ge8ztwac72sfr9rusxg3297
+        </div>
+      </div>
+
+      <button onclick="alert('QR code would appear here (demo)')" class="w-full bg-btc-orange text-black font-bold text-xl py-5 rounded-2xl active:opacity-80">
+        Show QR Code
+      </button>
+    </div>
+
+    <div class="bottom-nav h-20 flex items-center justify-around text-gray-400">
+      <button onclick="showScreen('home-screen')" class="flex flex-col items-center">
+        <i class="fa-solid fa-house text-3xl"></i>
+        <span class="text-xs mt-1">Home</span>
+      </button>
+      <button class="flex flex-col items-center text-btc-orange">
+        <i class="fa-solid fa-qrcode text-3xl"></i>
+        <span class="text-xs mt-1">Receive</span>
+      </button>
+      <button onclick="showScreen('send-screen')" class="flex flex-col items-center">
+        <i class="fa-solid fa-paper-plane text-3xl"></i>
+        <span class="text-xs mt-1">Send</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Send Screen -->
+  <div id="send-screen" class="screen flex-1 flex flex-col pb-24 overflow-y-auto">
+    <div class="pt-16 px-6 pb-6">
+      <h2 class="text-3xl font-bold mb-6 text-center">Send Bitcoin</h2>
+
+      <div class="space-y-6">
+        <div>
+          <label class="block text-gray-300 mb-2 text-lg">To Address</label>
+          <input id="to-address" type="text" placeholder="Enter BTC address" class="w-full bg-card-dark border border-gray-700 rounded-2xl px-5 py-5 text-lg focus:outline-none focus:border-btc-orange">
+        </div>
+
+        <div>
+          <label class="block text-gray-300 mb-2 text-lg">Amount (BTC)</label>
+          <input id="amount" type="number" step="0.00000001" placeholder="0.00000000" class="w-full bg-card-dark border border-gray-700 rounded-2xl px-5 py-5 text-lg focus:outline-none focus:border-btc-orange">
+        </div>
+
+        <button id="send-btn" class="w-full bg-btc-orange text-black font-bold text-xl py-5 rounded-2xl active:opacity-80">
+          Send
+        </button>
+      </div>
+
+      <div id="sent-message" class="hidden mt-10 text-center text-2xl font-bold text-accent-green">
+        Sent successfully! (Demo)
       </div>
     </div>
 
-    <!-- Fake warning -->
-    <div class="mt-12 px-8 text-center">
-      <div class="text-3xl font-black text-accent-red/80 mb-4">THIS IS A DEMO ONLY</div>
-      <p class="text-lg text-gray-300 mb-3">No real Bitcoin • No blockchain connection</p>
-      <p class="text-gray-500">For visual/testing purposes • Do NOT send funds here</p>
+    <div class="bottom-nav h-20 flex items-center justify-around text-gray-400">
+      <button onclick="showScreen('home-screen')" class="flex flex-col items-center">
+        <i class="fa-solid fa-house text-3xl"></i>
+        <span class="text-xs mt-1">Home</span>
+      </button>
+      <button onclick="showScreen('receive-screen')" class="flex flex-col items-center">
+        <i class="fa-solid fa-qrcode text-3xl"></i>
+        <span class="text-xs mt-1">Receive</span>
+      </button>
+      <button class="flex flex-col items-center text-btc-orange">
+        <i class="fa-solid fa-paper-plane text-3xl"></i>
+        <span class="text-xs mt-1">Send</span>
+      </button>
     </div>
   </div>
 
@@ -147,10 +197,9 @@
     let pin = '';
     const correctPin = '2586';
     const dots = document.querySelectorAll('.pin-dot');
-    const pinScreen = document.getElementById('pin-screen');
-    const mainView = document.getElementById('main-view');
 
-    document.querySelectorAll('.key-btn').forEach(btn => {
+    // PIN logic
+    document.querySelectorAll('.key').forEach(btn => {
       btn.addEventListener('click', () => {
         if (pin.length < 4) {
           pin += btn.dataset.value;
@@ -160,43 +209,61 @@
       });
     });
 
-    document.getElementById('delete-btn').addEventListener('click', () => {
+    document.getElementById('delete').addEventListener('click', () => {
       pin = pin.slice(0, -1);
       updateDots();
     });
 
     function updateDots() {
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('filled', i < pin.length);
-      });
+      dots.forEach((dot, i) => dot.classList.toggle('filled', i < pin.length));
     }
 
     function checkPin() {
       if (pin.length === 4) {
         if (pin === correctPin) {
-          pinScreen.style.display = 'none';
-          mainView.style.display = 'block';
+          document.getElementById('pin-screen').style.display = 'none';
+          showScreen('home-screen');
         } else {
-          // Wrong PIN → shake + reset
-          pinScreen.classList.add('animate-shake');
+          document.getElementById('pin-screen').classList.add('animate-shake');
           setTimeout(() => {
-            pinScreen.classList.remove('animate-shake');
+            document.getElementById('pin-screen').classList.remove('animate-shake');
             pin = '';
             updateDots();
           }, 600);
         }
       }
     }
+
+    // Screen navigation
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+      document.getElementById(id).style.display = 'flex';
+    }
+
+    // Fake send
+    document.getElementById('send-btn').addEventListener('click', () => {
+      const addr = document.getElementById('to-address').value.trim();
+      const amt = document.getElementById('amount').value.trim();
+      if (addr && amt > 0) {
+        document.getElementById('sent-message').classList.remove('hidden');
+        setTimeout(() => {
+          document.getElementById('sent-message').classList.add('hidden');
+          document.getElementById('to-address').value = '';
+          document.getElementById('amount').value = '';
+        }, 3000);
+      } else {
+        alert('Please enter valid address and amount');
+      }
+    });
   </script>
 
   <style>
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-8px); }
-      50% { transform: translateX(8px); }
-      75% { transform: translateX(-8px); }
+      0%,100%{transform:translateX(0)}
+      20%,60%{transform:translateX(-12px)}
+      40%,80%{transform:translateX(12px)}
     }
-    .animate-shake { animation: shake 0.5s; }
+    .animate-shake{animation:shake 0.5s}
   </style>
 
 </body>
