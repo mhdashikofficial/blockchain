@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <!-- Favicon added here -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/gLCdZmVh/84d1bd30b0cb06352ef0cf6fbae3285c-icon.png" />
+  <!-- Alternative common orange Bitcoin favicon (if you prefer a different style) -->
+  <!-- <link rel="icon" type="image/png" href="https://www.citypng.com/public/uploads/preview/hd-orange-b-bitcoin-letter-logo-icon-png-31625508234k7q8q8q8q8.png" /> -->
   <title>Blockchain Wallet • Demo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -15,12 +19,10 @@
             'bg-dark': '#0f1117',
             'card-dark': '#1a1f2e',
             'accent-green': '#00c087',
+            'accent-red': '#ff3b30',
           },
           borderRadius: {
-            'iphone': '2.75rem',
-          },
-          maxWidth: {
-            'iphone': '428px',
+            'xl': '1.5rem',
           }
         }
       }
@@ -28,193 +30,174 @@
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    body { background: linear-gradient(to bottom, #0f1117, #0a0e17); }
-    .iphone-frame {
-      box-shadow: 0 0 60px rgba(0,0,0,0.9);
-      border: 14px solid #000;
-      border-radius: 60px;
-      overflow: hidden;
-      background: #000;
-      position: relative;
-    }
-    .notch {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 150px;
-      height: 30px;
-      background: #000;
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
-      z-index: 50;
-    }
-    .status-bar {
-      height: 44px;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(10px);
-      color: white;
-      font-size: 12px;
-      padding: 0 20px;
-    }
+    body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .pin-dot { width: 18px; height: 18px; border-radius: 50%; background: #4b5563; transition: all 0.2s; }
+    .pin-dot.filled { background: #f7931a; transform: scale(1.2); }
+    #main-view { display: none; }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex flex-col">
 
-  <!-- iPhone-like frame -->
-  <div class="iphone-frame w-full max-w-iphone h-[844px] relative overflow-hidden bg-bg-dark">
-
-    <!-- Dynamic Island / Notch simulation -->
-    <div class="notch"></div>
-
-    <!-- Fake status bar -->
-    <div class="status-bar flex justify-between items-center px-6 pt-2 text-white">
-      <span>9:41</span>
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-signal"></i>
-        <i class="fa-solid fa-wifi"></i>
-        <i class="fa-solid fa-battery-full"></i>
+  <!-- PIN / Passcode Screen -->
+  <div id="pin-screen" class="flex-1 flex flex-col items-center justify-center px-8 py-12">
+    <div class="text-center mb-12">
+      <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-btc-orange to-orange-700 flex items-center justify-center shadow-xl">
+        <i class="fa-brands fa-bitcoin text-white text-5xl"></i>
       </div>
+      <h1 class="text-3xl font-bold text-white mb-2">Unlock Wallet</h1>
+      <p class="text-gray-400">Enter your 4-digit passcode</p>
     </div>
 
-    <!-- Scrollable content area -->
-    <div class="h-[calc(100%-44px)] overflow-y-auto pb-24">
-
-      <!-- Header / Balance -->
-      <div class="pt-8 pb-6 px-6 text-center">
-        <p class="text-gray-400 text-sm mb-1">Total Portfolio Value</p>
-        <div class="text-5xl font-bold tracking-tight text-white">
-          28.000000 <span class="text-4xl text-btc-orange">BTC</span>
-        </div>
-        <div class="mt-2 text-2xl font-semibold text-accent-green">
-          ≈ $2,684,920.00
-          <span class="text-sm ml-2 bg-accent-green/20 text-accent-green px-2 py-0.5 rounded-full">+5.8%</span>
-        </div>
-        <p class="text-xs text-gray-500 mt-3">Updated just now • Mainnet (demo only)</p>
-      </div>
-
-      <!-- Quick action buttons -->
-      <div class="flex justify-around px-6 py-4">
-        <button class="flex flex-col items-center text-white">
-          <div class="w-14 h-14 bg-card-dark rounded-full flex items-center justify-center mb-2">
-            <i class="fa-solid fa-arrow-up text-btc-orange text-2xl"></i>
-          </div>
-          <span class="text-sm">Send</span>
-        </button>
-        <button class="flex flex-col items-center text-white">
-          <div class="w-14 h-14 bg-card-dark rounded-full flex items-center justify-center mb-2">
-            <i class="fa-solid fa-arrow-down text-accent-green text-2xl"></i>
-          </div>
-          <span class="text-sm">Receive</span>
-        </button>
-        <button class="flex flex-col items-center text-white">
-          <div class="w-14 h-14 bg-card-dark rounded-full flex items-center justify-center mb-2">
-            <i class="fa-solid fa-arrow-right-arrow-left text-blue-400 text-2xl"></i>
-          </div>
-          <span class="text-sm">Swap</span>
-        </button>
-        <button class="flex flex-col items-center text-white opacity-60">
-          <div class="w-14 h-14 bg-card-dark rounded-full flex items-center justify-center mb-2">
-            <i class="fa-solid fa-plus text-purple-400 text-2xl"></i>
-          </div>
-          <span class="text-sm">Buy</span>
-        </button>
-      </div>
-
-      <!-- Assets card -->
-      <div class="mx-5 mt-6 bg-card-dark rounded-3xl p-6 border border-gray-800/50 shadow-xl">
-        <div class="flex justify-between items-center mb-5">
-          <h2 class="text-lg font-semibold text-white">Your Assets</h2>
-          <span class="text-btc-orange text-sm">Manage →</span>
-        </div>
-
-        <div class="space-y-5">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-btc-orange to-orange-600 flex items-center justify-center">
-                <i class="fa-brands fa-bitcoin text-white text-xl"></i>
-              </div>
-              <div>
-                <div class="font-semibold">Bitcoin</div>
-                <div class="text-xs text-gray-400">BTC</div>
-              </div>
-            </div>
-            <div class="text-right">
-              <div class="font-bold">28.000000 BTC</div>
-              <div class="text-sm text-accent-green">$2,684,920</div>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between opacity-70">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-500 to-gray-700 flex items-center justify-center">
-                <i class="fa-solid fa-coins text-white text-xl"></i>
-              </div>
-              <div>
-                <div class="font-semibold">Ethereum</div>
-                <div class="text-xs text-gray-400">ETH</div>
-              </div>
-            </div>
-            <div class="text-right">
-              <div class="font-bold">0.00 ETH</div>
-              <div class="text-sm text-gray-400">$0.00</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent transactions (fake) -->
-      <div class="mx-5 mt-6 bg-card-dark rounded-3xl p-6 border border-gray-800/50">
-        <h2 class="text-lg font-semibold text-white mb-4">Recent Activity</h2>
-        <div class="space-y-4 text-sm">
-          <div class="flex justify-between">
-            <div>
-              <div class="font-medium text-white">Received Payment</div>
-              <div class="text-gray-400">Today 14:31 • 6 conf.</div>
-            </div>
-            <div class="text-accent-green font-bold">+0.320 BTC</div>
-          </div>
-          <div class="flex justify-between opacity-80">
-            <div>
-              <div class="font-medium text-white">Sent to Exchange</div>
-              <div class="text-gray-400">Mar 2 11:08 • 48 conf.</div>
-            </div>
-            <div class="text-red-400 font-bold">−1.500 BTC</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Huge watermark / warning -->
-      <div class="text-center mt-12 px-8 text-gray-600 text-sm">
-        <div class="text-2xl font-bold text-red-500/70 mb-3">DEMO MODE ONLY</div>
-        <p>This page is a visual simulation — no real cryptocurrency is present.</p>
-        <p>Do NOT send any funds here. No blockchain connection exists.</p>
-        <p class="mt-4 text-gray-500">For educational / presentation use only • 2026</p>
-      </div>
-
+    <!-- Dots for PIN -->
+    <div id="pin-dots" class="flex gap-6 mb-12">
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
     </div>
 
-    <!-- Bottom navigation bar -->
-    <div class="fixed bottom-0 left-0 right-0 max-w-iphone mx-auto bg-black/80 backdrop-blur-xl border-t border-gray-800/70 h-20 flex items-center justify-around text-gray-400 z-50">
-      <button class="flex flex-col items-center text-btc-orange">
-        <i class="fa-solid fa-house text-2xl"></i>
-        <span class="text-xs mt-1">Home</span>
-      </button>
-      <button class="flex flex-col items-center">
-        <i class="fa-solid fa-chart-line text-2xl"></i>
-        <span class="text-xs mt-1">Markets</span>
-      </button>
-      <button class="flex flex-col items-center">
-        <i class="fa-solid fa-wallet text-2xl"></i>
-        <span class="text-xs mt-1">Portfolio</span>
-      </button>
-      <button class="flex flex-col items-center">
-        <i class="fa-solid fa-gear text-2xl"></i>
-        <span class="text-xs mt-1">Settings</span>
+    <!-- Numeric keypad -->
+    <div class="grid grid-cols-3 gap-6 w-full max-w-xs">
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="1">1</button>
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="2">2</button>
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="3">3</button>
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="4">4</button>
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="5">5</button>
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="6">6</button>
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="7">7</button>
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="8">8</button>
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="9">9</button>
+      <div></div>
+      <button class="key-btn text-4xl font-semibold text-white bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition" data-value="0">0</button>
+      <button id="delete-btn" class="text-3xl text-gray-400 bg-card-dark rounded-2xl h-20 hover:bg-gray-700 transition flex items-center justify-center">
+        <i class="fa-solid fa-delete-left"></i>
       </button>
     </div>
 
+    <p class="mt-10 text-sm text-gray-500">Forgot passcode? • Use email recovery (demo only)</p>
   </div>
+
+  <!-- Main Wallet View (hidden until correct PIN) -->
+  <div id="main-view" class="flex-1 overflow-y-auto pb-24">
+
+    <!-- Balance header -->
+    <div class="pt-14 pb-10 px-6 text-center bg-gradient-to-b from-btc-orange/10 to-transparent">
+      <p class="text-gray-400 text-base mb-2">Total Balance</p>
+      <div class="text-6xl font-extrabold text-white tracking-tight">
+        28.000000<span class="text-4xl font-bold text-btc-orange ml-3">BTC</span>
+      </div>
+      <div class="mt-3 text-3xl font-semibold text-accent-green">
+        ≈ $2,684,920
+        <span class="text-base ml-3 bg-accent-green/20 text-accent-green px-3 py-1 rounded-full">+6.4%</span>
+      </div>
+      <p class="text-sm text-gray-500 mt-4">Updated moments ago • Mainnet (DEMO)</p>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="flex justify-around px-6 py-8 bg-card-dark mx-5 rounded-3xl shadow-xl border border-gray-800/40">
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-btc-orange/20 flex items-center justify-center">
+          <i class="fa-solid fa-arrow-up text-btc-orange text-3xl"></i>
+        </div>
+        <p class="text-white font-medium">Send</p>
+      </div>
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-accent-green/20 flex items-center justify-center">
+          <i class="fa-solid fa-arrow-down text-accent-green text-3xl"></i>
+        </div>
+        <p class="text-white font-medium">Receive</p>
+      </div>
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-blue-500/20 flex items-center justify-center">
+          <i class="fa-solid fa-arrow-right-arrow-left text-blue-400 text-3xl"></i>
+        </div>
+        <p class="text-white font-medium">Swap</p>
+      </div>
+    </div>
+
+    <!-- Assets list -->
+    <div class="mx-5 mt-8 bg-card-dark rounded-3xl p-6 border border-gray-800/40">
+      <h2 class="text-xl font-bold text-white mb-5">Assets</h2>
+      <div class="flex items-center justify-between py-4 border-b border-gray-800/50">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-btc-orange to-orange-600 flex items-center justify-center">
+            <i class="fa-brands fa-bitcoin text-white text-3xl"></i>
+          </div>
+          <div>
+            <div class="font-bold text-white text-lg">Bitcoin</div>
+            <div class="text-gray-400 text-sm">BTC</div>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="font-bold text-white text-xl">28.000000</div>
+          <div class="text-accent-green">$2,684,920</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fake warning -->
+    <div class="mt-12 px-8 text-center">
+      <div class="text-3xl font-black text-accent-red/80 mb-4">THIS IS A DEMO ONLY</div>
+      <p class="text-lg text-gray-300 mb-3">No real Bitcoin • No blockchain connection</p>
+      <p class="text-gray-500">For visual/testing purposes • Do NOT send funds here</p>
+    </div>
+  </div>
+
+  <script>
+    let pin = '';
+    const correctPin = '2586';
+    const dots = document.querySelectorAll('.pin-dot');
+    const pinScreen = document.getElementById('pin-screen');
+    const mainView = document.getElementById('main-view');
+
+    document.querySelectorAll('.key-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (pin.length < 4) {
+          pin += btn.dataset.value;
+          updateDots();
+          checkPin();
+        }
+      });
+    });
+
+    document.getElementById('delete-btn').addEventListener('click', () => {
+      pin = pin.slice(0, -1);
+      updateDots();
+    });
+
+    function updateDots() {
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('filled', i < pin.length);
+      });
+    }
+
+    function checkPin() {
+      if (pin.length === 4) {
+        if (pin === correctPin) {
+          pinScreen.style.display = 'none';
+          mainView.style.display = 'block';
+        } else {
+          // Wrong PIN → shake + reset
+          pinScreen.classList.add('animate-shake');
+          setTimeout(() => {
+            pinScreen.classList.remove('animate-shake');
+            pin = '';
+            updateDots();
+          }, 600);
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+    }
+    .animate-shake { animation: shake 0.5s; }
+  </style>
 
 </body>
 </html>
